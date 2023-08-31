@@ -57,7 +57,7 @@ class RabbitMQPackage:
             exchange_internal: bool, # exchange_internal is an exchange type that is used for internal messaging
             # within RabbitMQ itself. you can set False when you don't need that
             queue_name: str,  # name queue
-            payload: Any,
+            payload: bytes,
     ) -> Any:
         channel: pika.BlockingConnection = self.connection()
         channel_connection = channel.channel()
@@ -77,7 +77,7 @@ class RabbitMQPackage:
         channel_connection.basic_publish(
             exchange=exchange_name,
             routing_key=exchange_binding_key,
-            body=json.dumps(payload)
+            body=payload
         )
         print(f"Success to send message Exchange: {exchange_name} with Routing key: {exchange_binding_key}, Queue: {queue_name}")
         return True
